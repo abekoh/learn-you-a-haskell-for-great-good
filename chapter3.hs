@@ -1,3 +1,5 @@
+import Distribution.Verbosity (normal)
+
 -- {-# OPTIONS -Wall -Werror #-}
 lucky :: Int -> String
 lucky 7 = "LUCKY NUMBER SEVEN!"
@@ -23,10 +25,20 @@ firstLetter a@(x : _) = "The first letter of " ++ a ++ " is " ++ [x]
 
 bmiTell :: Double -> Double -> String
 bmiTell weight height
-  | weight / height ^ 2 <= 18.5 = "You're underweight, you emo, you!"
-  | weight / height ^ 2 <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"
-  | weight / height ^ 2 <= 30.0 = "You're fat! Lose some weight, fatty!"
+  | bmi <= skinny = "You're underweight, you emo, you!"
+  | bmi <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"
+  | bmi <= fat = "You're fat! Lose some weight, fatty!"
   | otherwise = "You're a whale, conguratulations!"
+  where
+    bmi = weight / height ^ 2
+    skinny = 18.5
+    normal = 25.0
+    fat = 30.0
+
+calcBmis :: [(Double, Double)] -> [Double]
+calcBmis xs = [bmi w h | (w, h) <- xs]
+  where
+    bmi weight height = weight / height ^ 2
 
 main :: IO ()
 main = do
@@ -39,3 +51,4 @@ main = do
   -- print (head' [1, 2, 3])
   print (firstLetter "Dracula")
   print (bmiTell 54 1.62)
+  print (calcBmis [(54, 1.62)])
