@@ -26,6 +26,13 @@ elem' a (x : xs)
   | a == x = True
   | otherwise = elem' a xs
 
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x : xs) =
+  let smallerOrEqual = [a | a <- xs, a <= x]
+      larger = [a | a <- xs, a > x]
+   in quicksort smallerOrEqual ++ [x] ++ quicksort larger
+
 main :: IO ()
 main = do
   print (maximum' [1, 45, 20, 10, 33])
@@ -34,3 +41,5 @@ main = do
   print (reverse' [1, 2, 3, 4, 5])
   print (elem' 2 [1, 2, 3, 4, 5])
   print (elem' 0 [1, 2, 3, 4, 5])
+  print (quicksort [9, 1, 2, 5, 8, 0, 3])
+  print (quicksort "the quick brown fox jumps over the lazy dog")
