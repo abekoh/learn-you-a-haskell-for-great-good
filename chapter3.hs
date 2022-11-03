@@ -1,5 +1,3 @@
-import Distribution.Verbosity (normal)
-
 -- {-# OPTIONS -Wall -Werror #-}
 lucky :: Int -> String
 lucky 7 = "LUCKY NUMBER SEVEN!"
@@ -40,6 +38,23 @@ calcBmis xs = [bmi w h | (w, h) <- xs]
   where
     bmi weight height = weight / height ^ 2
 
+calcBmis2 :: [(Double, Double)] -> [Double]
+calcBmis2 xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2]
+
+cylinder :: Double -> Double -> Double
+cylinder r h =
+  let sideArea = 2 * pi * r * h
+      topArea = pi * r ^ 2
+   in sideArea + 2 * topArea
+
+describeList :: [a] -> String
+describeList ls =
+  "The list is "
+    ++ case ls of
+      [] -> "empty."
+      [x] -> "a singleton list."
+      xs -> "a longer list."
+
 main :: IO ()
 main = do
   -- print (removeNonUppercase "PfwoefhapiuHEW")
@@ -52,3 +67,7 @@ main = do
   print (firstLetter "Dracula")
   print (bmiTell 54 1.62)
   print (calcBmis [(54, 1.62)])
+  print (cylinder 1.1 2.2)
+  print (4 * (let a = 9 in a + 1) + 2)
+  print (describeList [1, 2])
+  print (describeList [1])
