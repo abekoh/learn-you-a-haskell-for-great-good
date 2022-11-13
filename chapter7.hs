@@ -95,6 +95,13 @@ treeInsert x (Node a left right)
   | x < a = Node a (treeInsert x left) right
   | x > a = Node a left (treeInsert x right)
 
+treeElem :: (Ord a) => a -> Tree a -> Bool
+treeElem x EmptyTree = False
+treeElem x (Node a left right)
+  | x == a = True
+  | x < a = treeElem x left
+  | x > a = treeElem x right
+
 main :: IO ()
 main = do
   print $ "hello"
@@ -122,3 +129,10 @@ main = do
   let a = 3 :-: 4 :-: 5 :-: Empty
   let b = 6 :-: 7 :-: Empty
   print $ a ^++ b
+  let nums = [8, 6, 4, 1, 7, 3, 5]
+  let numsTree = foldr treeInsert EmptyTree nums
+  print numsTree
+  print $ 8 `treeElem` numsTree
+  print $ 100 `treeElem` numsTree
+  print $ 1 `treeElem` numsTree
+  print $ 10 `treeElem` numsTree
