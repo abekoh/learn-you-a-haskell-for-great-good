@@ -102,6 +102,52 @@ treeElem x (Node a left right)
   | x < a = treeElem x left
   | x > a = treeElem x right
 
+data TrafficLight = Red | Yellow | Green
+
+instance Eq TrafficLight where
+  Red == Red = True
+  Green == Green = True
+  Yellow == Yellow = True
+  _ == _ = False
+
+instance Show TrafficLight where
+  show Red = "Red light"
+  show Yellow = "Yellow light"
+  show Green = "Green light"
+
+class YesNo a where
+  yesno :: a -> Bool
+
+instance YesNo Int where
+  yesno 0 = False
+  yesno _ = True
+
+instance YesNo [a] where
+  yesno [] = False
+  yesno _ = True
+
+instance YesNo Bool where
+  yesno = id
+
+instance YesNo (Maybe a) where
+  yesno (Just _) = True
+  yesno Nothing = False
+
+instance YesNo TrafficLight where
+  yesno Red = False
+  yesno _ = True
+
+yesnoIf :: (YesNo y) => y -> a -> a -> a
+yesnoIf yesnoVal yesResult noResult =
+  if yesno yesnoVal
+    then yesResult
+    else noResult
+
+-- instance Functor [] where
+--   fmap = map
+
+
+
 main :: IO ()
 main = do
   print $ "hello"
@@ -136,3 +182,21 @@ main = do
   print $ 100 `treeElem` numsTree
   print $ 1 `treeElem` numsTree
   print $ 10 `treeElem` numsTree
+  print $ Red == Red
+  print $ Red == Yellow
+  print [Red, Yellow, Green]
+
+  print $ yesno $ length []
+  print $ yesno "haha"
+  print $ yesno ""
+  print $ yesno True
+  print $ yesno []
+
+  print $ yesnoIf [] "YEAH!" "NO!"
+  print $ yesnoIf [2, 3, 4] "YEAH!" "NO!"
+
+  print $ map (* 2) [1 .. 3]
+  print $ fmap (* 2) [1 .. 3]
+
+  print $ fmap (*2) (Just 200)
+  print $ fmap (*2) Nothing
