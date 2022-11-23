@@ -8,4 +8,7 @@ https://www.haskell.org/ghcup/
 
 ```
 runghc target.hs
+# with random package
+runghc target.hs --package random
 ```
+
