@@ -1,3 +1,6 @@
+import Data.List
+import Distribution.Simple.Setup (HscolourFlags(hscolourCabalFilePath))
+
 solveRPN :: String -> Double
 solveRPN = head . foldl foldingFunction [] . words
   where
@@ -47,6 +50,11 @@ optimalPath roadSystem =
         then reverse bestAPath
         else reverse bestBPath
 
+groupsOf :: Int -> [a] -> [[a]]
+groupsOf 0 _ = undefined
+groupsOf _ [] = []
+groupsOf n xs = take n xs : groupsOf n (drop n xs)
+
 main :: IO ()
 main = do
   print $ solveRPN "10 4 3 + 2 * -"
@@ -55,3 +63,12 @@ main = do
   print $ solveRPN "10 10 10 10 sum 4 /"
   print $ roadStep ([], []) (head heathrowToLondon)
   print $ optimalPath heathrowToLondon
+
+  contents <- readFile "paths.txt"
+  let threes = groupsOf 3 (map read $ words contents)
+      roadSystem = map (\[a, b, c] -> Section a b c) threes
+      path = optimalPath roadSystem
+      pathString = concat $ map (show . fst) path
+      pathTime = sum $ map snd path
+  putStrLn $ "The best path to take is: " ++ pathString
+  putStrLn $ "Time taken: " ++ show pathTime
